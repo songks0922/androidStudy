@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -16,12 +17,21 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity {
     // 구글로그인 result 상수
@@ -35,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
     // 구글  로그인 버튼
     private SignInButton buttonGoogle;
-    private Button signOutButton, revokeButton;
+    private Button signOutButton, revokeButton, firestoreButton;
+    public static final int sub = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +87,16 @@ public class MainActivity extends AppCompatActivity {
                 revokeAccess();
             }
         });
+
+        firestoreButton = findViewById(R.id.store);
+        firestoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),SubActivity.class);
+                startActivityForResult(intent, sub);
+            }
+        });
+
     }
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
 
