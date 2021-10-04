@@ -1,5 +1,6 @@
 package com.example.firebase_test;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,7 +26,7 @@ import java.util.Map;
 import static android.content.ContentValues.TAG;
 
 public class SubActivity extends AppCompatActivity {
-
+    public static final int re = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +34,11 @@ public class SubActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sub);
 
         Button button = (Button)findViewById(R.id.submit);
+        Button recycler = (Button)findViewById(R.id.recycler);
 
         EditText firstName = (EditText)findViewById(R.id.fisrt);
         EditText lastName = (EditText)findViewById(R.id.last);
-        EditText born = (EditText)findViewById(R.id.born);
+        EditText phonNumber = (EditText)findViewById(R.id.phonNumber);
 
         TextView textView = (TextView)findViewById(R.id.textView);
 
@@ -49,7 +51,7 @@ public class SubActivity extends AppCompatActivity {
                 Map<String, Object> user = new HashMap<>();
                 user.put("first", firstName.getText().toString());
                 user.put("last", lastName.getText().toString());
-                user.put("born", born.getText().toString());
+                user.put("phonNumber", phonNumber.getText().toString());
                 // Add a new document with a generated ID
                 db.collection("users").document("test")
                     .set(user)
@@ -65,7 +67,7 @@ public class SubActivity extends AppCompatActivity {
                         Log.w(TAG, "Error adding document", e);
                     }
                 });
-                textView.setText(firstName.getText().toString() + " " + lastName.getText().toString() + "\nborn: " + born.getText().toString());
+                textView.setText(firstName.getText().toString() + " " + lastName.getText().toString() + "\nphonNumber: " + phonNumber.getText().toString());
             }
         });
 
@@ -81,30 +83,19 @@ public class SubActivity extends AppCompatActivity {
 
                 if (snapshot != null && snapshot.exists()) {
                     //Log.d(TAG, "Current data: " + snapshot.getData());
-//                    firstName.setText(snapshot.getData().get("first").toString());
-//                    lastName.setText(snapshot.getData().get("last").toString());
-//                    born.setText(snapshot.getData().get("born").toString());
-                    textView.setText(snapshot.getData().get("first") + " " + snapshot.getData().get("last") + "\nborn: " + snapshot.getData().get("born"));
+                    textView.setText(snapshot.getData().get("first") + " " + snapshot.getData().get("last") + "\nphonNumber: " + snapshot.getData().get("phonNumber"));
                 } else {
                     Log.d(TAG, "Current data: null");
                 }
             }
         });
 
-        //delete
-//        db.collection("users").document("")
-//                .delete()
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w(TAG, "Error deleting document", e);
-//                    }
-//                });
+        recycler.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), recycelerActivity.class);
+                startActivityForResult(intent, re);
+            }
+        });
     }
 }
